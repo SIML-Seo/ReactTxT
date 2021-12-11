@@ -1,0 +1,5 @@
+
+const notepad = () => {
+    let tabs = [];
+
+}

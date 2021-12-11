@@ -1,7 +1,11 @@
+import * as TAB from "./tab.js"
+
 const saveButton = document.getElementById("saveBtn");
 const loadButton = document.getElementById("loadBtn");
 const saveAsButton = document.getElementById("saveAsBtn")
 const saveCon = document.getElementById("save-container");
+const tabCon = document.getElementById("tab-container");
+const tabLi = document.getElementById("tab-li");
 
 let dataModifyFlag = "";
 
@@ -25,9 +29,9 @@ function save() {
         title = selectTitle;
     }
     console.log("COMPLETE SAVE!");
-    const saveTabData = tabInfo(TxTData);
-    tabs.push(saveTabData);
-    saveTabtoStorage(saveTabData, title);
+    const saveTabData = TAB.tabInfo(TxTData);
+    TAB.tabs.push(saveTabData);
+    TAB.saveTabtoStorage(saveTabData, title);
     tabLi.querySelector(":scope > .selected").innerText = title;
     dataModifyFlag = TxTData;
     if(tabLi.querySelector(":scope > .selected").innerText.endsWith("*")){
@@ -65,10 +69,10 @@ function saveAs(){
         saveCon.appendChild(p);
     }
     console.log("COMPLETE SAVE!");
-    const saveTabData = tabInfo(TxTData);
-    tabs.push(saveTabData);
-    saveTabtoStorage(saveTabData, title);
-    handleTab(saveTabData, title);
+    const saveTabData = TAB.tabInfo(TxTData);
+    TAB.tabs.push(saveTabData);
+    TAB.saveTabtoStorage(saveTabData, title);
+    TAB.handleTab(saveTabData, title);
 }
 
 function indicatorWithSaveEditToTextarea(){
@@ -93,9 +97,9 @@ function load(title){
     console.log("title : " + title)
     let TxTData = JSON.parse(localStorage.getItem(title)).text;
     console.log("TxTData : " + TxTData);
-    let savedTab = tabs.find((tab) => tab.text === TxTData);
+    let savedTab = TAB.tabs.find((tab) => tab.text === TxTData);
     console.log("savedTab : " + savedTab);
-    if(handleTab(savedTab) === 1){
+    if(TAB.handleTab(savedTab) === 1){
         tabLi.querySelector(":scope > .selected").innerText = title;
         let tabLis = tabLi.querySelectorAll(":scope > .notselected")
         for(let i = 0; i < tabLis.length; i++){
@@ -117,3 +121,5 @@ function load(title){
 saveButton.addEventListener("click", save)
 loadButton.addEventListener("click", clickloadBtn)
 saveAsButton.addEventListener("click", saveAs)
+
+export default indicatorWithSaveEditToTextarea();

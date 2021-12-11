@@ -1,3 +1,5 @@
+import indicatorWithSaveEditToTextarea from "./saveLoad.js"
+
 const tabButton = document.getElementById("tabBtn");
 const tabCon = document.getElementById("tab-container");
 const tabLi = document.getElementById("tab-li");
@@ -38,7 +40,7 @@ function handleTab_li(newTab, title){
     for(let i = 0; i < tabLiChild.length; i++){
         console.log("tabLiChild id : " + tabLiChild[i].id);
         console.log("newTab id : " + newTab.id);
-        if(tabLiChild[i].id == newTab.id){
+        if(tabLiChild[i].id === newTab.id){
             return 0;
         }
     }
