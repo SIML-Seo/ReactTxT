@@ -1,0 +1,16 @@
+.save_container{
+	display: flex;
+}
+
+.save_container div.selected{
+	flex: 1;
+	border-radius:0px 5px 5px 5px;
+	background-color:#D0F5A9;
+	margin-top: 10px;
+	padding: 10px;
+}
+
+.save_container div.notselected{
+	display:none;
+	visibility:hidden;
+}
