@@ -1,0 +1,14 @@
+.container{
+    width: 500px;
+    margin: 10px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.container .title{
+    background-color: yellowgreen;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}   

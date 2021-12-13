@@ -1,0 +1,20 @@
+.menu{
+    display: flex;
+}
+
+.menu > button{
+    flex: 1;
+    background: none;
+    outline: none;
+    border: none;
+    background: yellowgreen;
+    color: white;
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    cursor:pointer;
+}
+
+.menu > button:hover{
+    background-color: green;
+}
