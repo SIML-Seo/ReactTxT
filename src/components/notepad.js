@@ -1,7 +1,6 @@
 import '../style/Notepad.css'
 
 const Notepad = ({children}) => {
-    // let tabs = [];
 
     return(
         <div className = "container">

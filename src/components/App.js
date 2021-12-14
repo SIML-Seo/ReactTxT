@@ -1,22 +1,56 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Notepad from './Notepad';
 import TabList from './TabList';
 import SaveList from './SaveList';
 import MenuList from './MenuList';
-// import '../style/App.css';
-// import '../style/style.css'
-// import '../style/tabStyle.css'
 
 const App = () => {
+	const [notes, setNotes] = useState([
+		{
+			id : 1,
+			title : "가",
+			text: "aaaaa",
+			selected: true,
+		},
+		{
+			id : 2,
+			title : "나",
+			text: "bbbbb",
+			selected: false,
+		},
+		{
+			id : 3,
+			title : "다",
+			text: "ccccc",
+			selected: false,
+		},
+	]);
+	
 	useEffect(() => {
-		localStorage.clear();
 	}, []);
+
+	const onDelete = useCallback(
+		id => {
+			const newNotes = notes.filter(note => note.id !== id)
+			let minIdNewNotes = Math.min.apply(Math, newNotes.map(note => note.id))
+			setNotes(newNotes.map(note => note.id !== minIdNewNotes ? { ...note, selected: false} : { ...note, selected: true}));
+		}, 
+		[notes]
+	)
+
+	const onClickToTabLi = useCallback(
+		id => {
+			setNotes(notes.map(note => note.id === id ? { ...note, selected: true} : { ...note, selected: false}));
+		},
+		[notes]
+	)
+
 
   return (
 	<Notepad>
 		<MenuList>
 		</MenuList>
-		<TabList>
+		<TabList notes = {notes} onDelete = {onDelete} onClickToTabLi = {onClickToTabLi}>
 		</TabList>	
 		<SaveList>
 		</SaveList>

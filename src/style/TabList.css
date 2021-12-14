@@ -18,6 +18,11 @@
     background-color: grey;
 }
 
+.tabLi button{
+    background: none;
+    outline: none;
+}
+
 .tabContainer textarea{
     border-color: greenyellow;
     resize: none;

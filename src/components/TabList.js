@@ -1,15 +1,30 @@
+import { useEffect, useState } from "react"
 import "../style/TabList.css"
 
-const TabList = () => {
+const TabList = ({notes , onDelete, onClickToTabLi}) => {
+    const tmp = (notes.find(note => note.selected === true)) ? notes.find(note => note.selected === true).text : "";
+    
+    const [text, setText] = useState(tmp)
+    useEffect(() => {
+        setText((notes.find(note => note.selected === true)) ? notes.find(note => note.selected === true).text : "")
+    }, [notes])
+
+    const onChange = (e) => {
+        setText(e.target.value);
+    }
+
     return(
-        <div>
+        <div className = "note">
             <div className = "tabLi">
-                <li>A</li>
-                <li>B</li>
-                <li>C</li>
+                {notes.map(note => (
+                    <>
+                        <li key={note.id} onClick={() => onClickToTabLi(note.id)}>{note.title}</li>
+                        <button key={note.id*4} onClick={() => onDelete(note.id)}>X</button>
+                    </>
+                ))}
             </div>
             <div className = "tabContainer">
-                <textarea>가나다라마바사</textarea>
+                <textarea value = {text} onChange={onChange}/>
             </div>
         </div>
     )
