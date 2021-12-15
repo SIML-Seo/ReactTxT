@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Notepad from './Notepad';
 import TabList from './TabList';
 import SaveList from './SaveList';
@@ -8,39 +8,60 @@ const App = () => {
 	const [notes, setNotes] = useState([
 		{
 			id : 1,
-			title : "가",
-			text: "aaaaa",
+			title : "O",
+			text: "",
 			selected: true,
 		},
-		{
-			id : 2,
-			title : "나",
-			text: "bbbbb",
-			selected: false,
-		},
-		{
-			id : 3,
-			title : "다",
-			text: "ccccc",
-			selected: false,
-		},
 	]);
+
+	// const [pageId, setPageId] = useState(0);
 	
 	useEffect(() => {
+		localStorage.clear();
 	}, []);
+
+	const nextId = useRef(2)
+
+	const onNewTab = useCallback(
+		() => {
+			const note = {
+				id : nextId.current,
+				title : "1",
+				text: "1",
+				selected: true
+			}
+			const newNotes = notes.map(note => ({...note, selected: false}))
+			setNotes(newNotes.concat(note));
+			nextId.current += 1;
+			console.log("onNewTab!!!")
+		},
+		[notes]
+	)
 
 	const onDelete = useCallback(
 		id => {
 			const newNotes = notes.filter(note => note.id !== id)
 			let minIdNewNotes = Math.min.apply(Math, newNotes.map(note => note.id))
 			setNotes(newNotes.map(note => note.id !== minIdNewNotes ? { ...note, selected: false} : { ...note, selected: true}));
+			console.log("onDelete!!!")
 		}, 
+		[notes]
+	)
+
+	const onChangeText = useCallback(
+		texts => {
+			// setNotes(notes.map(note => note.pageId === pageId ? {...note, text: texts} : note))
+			setNotes(notes.map(note => note.selected === true ? {...note, text: texts} : note))
+			console.log("onChangeText!!!")
+		},
 		[notes]
 	)
 
 	const onClickToTabLi = useCallback(
 		id => {
 			setNotes(notes.map(note => note.id === id ? { ...note, selected: true} : { ...note, selected: false}));
+			// setPageId(id);
+			console.log("onClickToTablLi!!!")
 		},
 		[notes]
 	)
@@ -48,9 +69,9 @@ const App = () => {
 
   return (
 	<Notepad>
-		<MenuList>
+		<MenuList onNewTab = {onNewTab}>
 		</MenuList>
-		<TabList notes = {notes} onDelete = {onDelete} onClickToTabLi = {onClickToTabLi}>
+		<TabList notes = {notes} onDelete = {onDelete} onChangeText = {onChangeText} onClickToTabLi = {onClickToTabLi}>
 		</TabList>	
 		<SaveList>
 		</SaveList>
