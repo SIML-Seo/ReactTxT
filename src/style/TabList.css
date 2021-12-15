@@ -14,6 +14,11 @@
     cursor:pointer;
 }
 
+.tabLi li.select{
+    background-color: Green;
+    color: white;
+}
+
 .tabLi li:hover{
     background-color: grey;
 }
