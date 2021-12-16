@@ -1,11 +1,25 @@
-// import { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import "../style/TabList.css"
 
 const TabList = ({notes , onDelete, onChangeText, onClickToTabLi}) => {
+    let text = "";
+    
+    const [textChecking, setTextChecking] = useState()
+
     const onChange = (e) => {
-        let texts = e.target.value
-        console.log("Texts : " + texts)
-        onChangeText(texts);
+        text = e.target.value;
+        setTextChecking(text)
+        onChangeText(text);
+    }
+
+    const indicator = (id) => {
+        let boolean = true;
+        const note = notes.find(note => note.id === id)
+        // console.log(note)
+        const saveText = localStorage.getItem(note.title);
+        // console.log(saveText) 하나의 세이브텍스트가 아님
+        (textChecking === saveText) ? boolean = true : boolean = false;
+        return boolean
     }
 
     return(
@@ -13,7 +27,11 @@ const TabList = ({notes , onDelete, onChangeText, onClickToTabLi}) => {
             <div className = "tabLi">
                 {notes.map(note => (
                     <>
-                        <li className = {note.selected ? 'select' : null} key={note.id} onClick={() => onClickToTabLi(note.id)}>{note.title}</li>
+                        <li className = {note.selected ? 'select' : null} key={note.id} 
+                            onClick={() => onClickToTabLi(note.id)}>
+                            {note.title}
+                            {(indicator(note.id)) ? null : "*"}
+                        </li>
                         <button key={note.id*4} onClick={() => onDelete(note.id)}>X</button>
                     </>
                 ))}
@@ -21,7 +39,7 @@ const TabList = ({notes , onDelete, onChangeText, onClickToTabLi}) => {
             <div className = "tabContainer">
                 <textarea value = 
                     {notes.find(note => note.selected === true) ? 
-                    notes.find(note => note.selected === true).text : ""} 
+                        notes.find(note => note.selected === true).text: ""} 
                 onChange={onChange}/>
             </div>
         </div>

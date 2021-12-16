@@ -15,6 +15,7 @@ const App = () => {
 
 	useEffect(() => {
 		localStorage.clear();
+		localStorage.setItem("O", "")
 	}, []);
 
 	const nextId = useRef(2)
@@ -31,13 +32,6 @@ const App = () => {
 			setNotes(newNotes.concat(note));
 			nextId.current += 1;
 			console.log("onNewTab!!!")
-		},
-		[notes]
-	)
-	
-	const onLoad = useCallback(
-		() => {
-
 		},
 		[notes]
 	)
@@ -71,7 +65,7 @@ const App = () => {
 
   return (
 	<Notepad>
-		<MenuList notes = {notes} setNotes = {setNotes} onLoad = {onLoad} onNewTab = {onNewTab} >
+		<MenuList notes = {notes} setNotes = {setNotes} onNewTab = {onNewTab} >
 		</MenuList>
 		<TabList notes = {notes} onDelete = {onDelete} onChangeText = {onChangeText} onClickToTabLi = {onClickToTabLi}>
 		</TabList>	
