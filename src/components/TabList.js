@@ -1,38 +1,32 @@
-import { useEffect, useState } from "react"
 import "../style/TabList.css"
 
 const TabList = ({notes , onDelete, onChangeText, onClickToTabLi}) => {
     let text = "";
     
-    const [textChecking, setTextChecking] = useState()
-
     const onChange = (e) => {
         text = e.target.value;
-        setTextChecking(text)
         onChangeText(text);
     }
 
     const indicator = (id) => {
         let boolean = true;
         const note = notes.find(note => note.id === id)
-        // console.log(note)
         const saveText = localStorage.getItem(note.title);
-        // console.log(saveText) 하나의 세이브텍스트가 아님
-        (textChecking === saveText) ? boolean = true : boolean = false;
+        (saveText === note.text) ? boolean = true : boolean = false;
         return boolean
     }
 
     return(
         <div className = "note">
             <div className = "tabLi">
-                {notes.map(note => (
+                {notes.map((note,index) => (
                     <>
                         <li className = {note.selected ? 'select' : null} key={note.id} 
                             onClick={() => onClickToTabLi(note.id)}>
                             {note.title}
                             {(indicator(note.id)) ? null : "*"}
                         </li>
-                        <button key={note.id*4} onClick={() => onDelete(note.id)}>X</button>
+                        <button key={index} onClick={() => onDelete(note.id)}>X</button>
                     </>
                 ))}
             </div>

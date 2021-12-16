@@ -1,0 +1,52 @@
+.loadContainer{
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 100px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #00000080;
+    z-index: 10000;
+}
+
+.loadContainer .modalContainer{
+    position: absolute;
+    /* width: 375px;
+    height: 620px;
+    left: 50%;
+    top: 50%; */
+}
+
+.container{
+    width: 500px;
+    margin: 10px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.container .title{
+    background-color: yellowgreen;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .content li{
+    list-style-type:none;
+    cursor: pointer;
+    background-color: yellowGreen;
+    color: white;
+    padding: 10px 20px;
+    font-weight:bold;
+    align-items: center;    
+    justify-content: center;
+
+}
+
+.container .content li:hover{
+    background-color: grey;
+}

@@ -1,12 +1,11 @@
-import {useState, useRef} from "react";
-import SaveList from "./SaveList"
+import {useState} from "react";
+import LoadList from "./LoadList"
 import '../style/MenuList.css'
 
 
-const MenuList = ({notes, setNotes, onNewTab}) => {
+const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
     const [saveData, setSaveData] = useState([])
-
-    const nextTitleId = useRef(1)
+    const [modalOn, setModalOn] = useState(false)
 
     const onSave = () => {
         let title = notes.find(note => note.selected).title
@@ -21,7 +20,6 @@ const MenuList = ({notes, setNotes, onNewTab}) => {
     }
     
     const onSaveAs = () => {
-        nextTitleId.current = 1;
         const currentTitle = notes.find(note => note.selected).title;
         let saveAsTitle = prompt("다시 저장할 타이틀을 정해주세요.")
         if(!saveAsTitle) return;
@@ -37,14 +35,7 @@ const MenuList = ({notes, setNotes, onNewTab}) => {
     }
 
     const onSaveLocalStorage = (saveTitle, text) => {
-        // for(let i = 0; i < saveData.length; i++){
-        //     if(saveData[i] === saveTitle){
-        //         saveTitle += " ( " + nextTitleId.current + " ) "
-        //         nextTitleId.current += 1;
-        //     }
-        // }
         setNotes(notes.map(note => note.selected ? {...note, title: saveTitle} : note))
-        // setSaveData(saveData.concat(saveTitle))
         if(!saveData.includes(saveTitle)){
             setSaveData(saveData.concat(saveTitle))
         }
@@ -53,10 +44,8 @@ const MenuList = ({notes, setNotes, onNewTab}) => {
     }
     
     const onLoad = () => {
-
+        setModalOn(!modalOn)
     }
-    //불러오기 
-
 
     return(
         <div className = "menu">
@@ -64,8 +53,10 @@ const MenuList = ({notes, setNotes, onNewTab}) => {
             <button className = "loadBtn" onClick={() => onLoad()}>LOAD</button>
             <button className = "saveAsBtn" onClick={() => onSaveAs()}>SAVEAS</button>            
             <button className = "tabBtn" onClick={() => onNewTab()}>TAB</button>
-        <SaveList>
-        </SaveList>
+        {modalOn && (
+            <LoadList notes = {notes} setNotes = {setNotes} saveData = {saveData} nextId = {nextId} onLoad = {onLoad}>
+            </LoadList>
+        )}
         </div>
     )
 }

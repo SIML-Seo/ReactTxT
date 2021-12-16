@@ -25,8 +25,8 @@ const App = () => {
 			const note = {
 				id : nextId.current,
 				title : "O",
-				text: "",
-				selected: true
+				text : "",
+				selected : true
 			}
 			const newNotes = notes.map(note => ({...note, selected: false}))
 			setNotes(newNotes.concat(note));
@@ -38,6 +38,13 @@ const App = () => {
 
 	const onDelete = useCallback(
 		id => {
+			let checkingNote = notes.find(note => note.id === id)
+			let checkingStor = localStorage.getItem(checkingNote.title)
+			let checkingText = checkingNote.text
+			if(checkingStor !== checkingText) {
+				return alert ("아직 데이터가 저장되지 않았습니다.")
+			}
+
 			const newNotes = notes.filter(note => note.id !== id)
 			let minIdNewNotes = Math.min.apply(Math, newNotes.map(note => note.id))
 			setNotes(newNotes.map(note => note.id !== minIdNewNotes ? { ...note, selected: false} : { ...note, selected: true}));
@@ -65,7 +72,7 @@ const App = () => {
 
   return (
 	<Notepad>
-		<MenuList notes = {notes} setNotes = {setNotes} onNewTab = {onNewTab} >
+		<MenuList notes = {notes} setNotes = {setNotes} nextId = {nextId} onNewTab = {onNewTab} >
 		</MenuList>
 		<TabList notes = {notes} onDelete = {onDelete} onChangeText = {onChangeText} onClickToTabLi = {onClickToTabLi}>
 		</TabList>	
