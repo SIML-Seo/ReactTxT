@@ -20,6 +20,9 @@ const App = () => {
 
 	const nextId = useRef(2)
 
+	/**
+	 * TAB 버튼 눌러 비어 있는 새로운 탭을 생성 후 그 외의 탭 비활성화 후, 해당 탭 활성화
+	 */
 	const onNewTab = useCallback(
 		() => {
 			const note = {
@@ -36,6 +39,9 @@ const App = () => {
 		[notes]
 	)
 
+	/**
+	 * X 버튼을 눌러 생성된 탭을 제거, 인디케이터 활성화 시 제거 불가, 제거 시 가장 낮은 ID 탭을 활성화
+	 */
 	const onDelete = useCallback(
 		id => {
 			let checkingNote = notes.find(note => note.id === id)
@@ -53,6 +59,9 @@ const App = () => {
 		[notes]
 	)
 
+	/**
+	 * Textarea에 작성되는 문자열을 노트에 실시간으로 저장
+	 */
 	const onChangeText = useCallback(
 		texts => {
 			setNotes(notes.map(note => note.selected === true ? {...note, text: texts} : note))
@@ -61,6 +70,9 @@ const App = () => {
 		[notes]
 	)
 
+	/**
+	 * Tab 목록들 중 해당하는 Tab 클릭 시 Tab에 부여된 id 값을 따라 활성화
+	 */
 	const onClickToTabLi = useCallback(
 		id => {
 			setNotes(notes.map(note => note.id === id ? { ...note, selected: true} : { ...note, selected: false}));

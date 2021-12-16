@@ -3,11 +3,20 @@ import "../style/TabList.css"
 const TabList = ({notes , onDelete, onChangeText, onClickToTabLi}) => {
     let text = "";
     
+    /**
+     * Textarea 내의 문자열 실시간으로 변경
+     * @param {*} e 
+     */
     const onChange = (e) => {
         text = e.target.value;
         onChangeText(text);
     }
 
+    /**
+     * 로컬스토리지에 저장된 값과 노트에 저장된 값을 비교하여 해당 값이 아직 저장되지 않았다는 것을 표시
+     * @param {*} id 
+     * @returns 
+     */
     const indicator = (id) => {
         let boolean = true;
         const note = notes.find(note => note.id === id)

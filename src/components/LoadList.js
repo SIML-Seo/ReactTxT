@@ -2,6 +2,11 @@ import "../style/LoadList.css"
 
 const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
 
+    /**
+     * JSX로 for문 적을 수 없기에 생성한 컴포넌트 
+     * 저장한 데이터 없을 시 표시, 있을 시 개수만큼 모달창에 목록 표시
+     * @returns 
+     */
     const content = () => {
         const result = [];
         if(saveData.length === 0) result.push(<li>아직 저장된 데이터가 없습니다.</li>)
@@ -12,6 +17,11 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
         return result;
     }
 
+    /**
+     * 띄워진 로드창에서 해당 라인 클릭 시 기존의 노트 ID를 참고하여 새 ID 작성 후,
+     * 다른 Tab을 비활성화 하고 Tab 새로 추가(불러오기)
+     * @param {*} title 
+     */
     const loadTab = (title) => {
         const text = localStorage.getItem(title);
         const loadNote = {

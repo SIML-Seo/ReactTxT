@@ -7,6 +7,10 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
     const [saveData, setSaveData] = useState([])
     const [modalOn, setModalOn] = useState(false)
 
+    /**
+     * 저장된 데이터일 경우 바로 저장, 새로운 저장일 경우 프롬프트를 띄워 저장, 만약 취소 버튼 클릭시 노네임으로 저장
+     * @returns 이미 한 번 저장한 데이터일 경우 저장 버튼 클릭 시 새 타이틀 작성 않고 바로 저장
+     */
     const onSave = () => {
         let title = notes.find(note => note.selected).title
         let text = notes.find(note => note.selected).text
@@ -19,6 +23,10 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
         onSaveLocalStorage(saveTitle, text);
     }
     
+    /**
+     * 기존에 저장된 타이틀을 다른 이름으로 저장
+     * @returns 다른 이름으로 저장 시 해당 이름이 이미 있으면 저장 불가
+     */
     const onSaveAs = () => {
         const currentTitle = notes.find(note => note.selected).title;
         let saveAsTitle = prompt("다시 저장할 타이틀을 정해주세요.")
@@ -34,6 +42,11 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
         localStorage.removeItem(currentTitle)
     }
 
+    /**
+     * 저장 데이터들을 노트와 로컬스토리지에 기록
+     * @param {*} saveTitle 
+     * @param {*} text 
+     */
     const onSaveLocalStorage = (saveTitle, text) => {
         setNotes(notes.map(note => note.selected ? {...note, title: saveTitle} : note))
         if(!saveData.includes(saveTitle)){
@@ -43,6 +56,9 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
         console.log("onSave!!!")
     }
     
+    /**
+     * 모달 창 표시 / 비표시 하기 위한 함수
+     */
     const onLoad = () => {
         setModalOn(!modalOn)
     }
