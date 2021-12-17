@@ -1,6 +1,7 @@
-import {useState} from "react";
+import {useState, useRef} from "react";
 import LoadList from "./LoadList"
 import '../style/MenuList.css'
+import { write } from "../firebase.js"
 
 
 const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
@@ -63,9 +64,34 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
         setModalOn(!modalOn)
     }
 
+
+
+    
+    const onSaveFS = (title, text) => {
+        setNotes(notes.map(note => note.selected ? {...note, title: title} : note))
+        if(!saveData.includes(title)){
+            setSaveData(saveData.concat(title))
+        }
+        write(title, text)
+        console.log("onSave!!!")
+
+    }
+
+    const onSaveF = () => {
+        let title = notes.find(note => note.selected).title
+        let text = notes.find(note => note.selected).text
+        if(saveData.includes(title)){
+            onSaveFS(title, text)
+            return;
+        }
+        let saveTitle = prompt("저장할 타이틀을 정해주세요.")
+        if(!saveTitle) saveTitle = "noName";
+        onSaveFS(saveTitle, text);
+    }
+
     return(
         <div className = "menu">
-            <button className = "saveBtn" onClick={() => onSave()}>SAVE</button>
+            <button className = "saveBtn" onClick={() => onSaveF()}>SAVE</button>
             <button className = "loadBtn" onClick={() => onLoad()}>LOAD</button>
             <button className = "saveAsBtn" onClick={() => onSaveAs()}>SAVEAS</button>            
             <button className = "tabBtn" onClick={() => onNewTab()}>TAB</button>

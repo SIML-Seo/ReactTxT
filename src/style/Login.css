@@ -1,0 +1,18 @@
+.login {
+    display: flex;
+    background-color: yellowgreen;
+    align-items: flex-end;
+    justify-content: right;
+}
+
+.login button {
+    color: white;
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.login button:hover{
+    background-color: green;
+}

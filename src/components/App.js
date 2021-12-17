@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Notepad from './Notepad';
 import TabList from './TabList';
 import MenuList from './MenuList';
+import Login from './Login';
 
 const App = () => {
 	const [notes, setNotes] = useState([
@@ -83,7 +84,8 @@ const App = () => {
 
 
   return (
-	<Notepad>
+	  <Notepad>
+		<Login></Login>
 		<MenuList notes = {notes} setNotes = {setNotes} nextId = {nextId} onNewTab = {onNewTab} >
 		</MenuList>
 		<TabList notes = {notes} onDelete = {onDelete} onChangeText = {onChangeText} onClickToTabLi = {onClickToTabLi}>

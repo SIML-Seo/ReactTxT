@@ -1,4 +1,6 @@
 import "../style/LoadList.css"
+import { load, titleList } from "../firebase.js"
+import { onSnapshot } from "firebase/firestore"
 
 const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
 
@@ -36,13 +38,49 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
         console.log("loadTab!!!")
     }
 
+
+
+    const loadF = (title) => {
+        const text = JSON.parse(load(title)).text;
+
+        const loadNote = {
+            id : nextId.current,
+            title : title,
+            text : text,
+            selected : true
+        }
+        nextId.current += 1;
+        const newNotes = notes.map(note => ({...note, selected: false}))
+        setNotes(() => newNotes.concat(loadNote));
+        console.log("loadTab!!!")
+    }
+
+    const contentF = () => {
+        const result = [];
+        const saveList = titleList();
+        console.log(saveList)
+
+        if(saveList.length === 0) result.push(<li>아직 저장된 데이터가 없습니다.</li>)
+        onSnapshot(saveList, snaps => {
+            snaps.forEach(note => {
+                result.push(<li onClick = {() => loadF(note.data().title)}>{note.data().title}</li>)
+            })
+        })
+        // for(let i = 0; i < saveList.length; i++){
+        //     console.log(saveList[i])
+        //     result.push(<li onClick = {() => loadF(saveList[i])}>{saveList[i]}</li>)
+        // }
+        return result;
+    }
+
+
     return(
         <div className = "loadContainer" onClick = {onLoad}>
             <div className = "modalContainer" onClick={(e) => e.stopPropagation}>
                 <div className= "container">
                     <div className = "title">Load List</div>
                     <div className = "content">
-                        {content()}
+                        {contentF()}
                     </div>
                 </div>
             </div>
