@@ -7,7 +7,6 @@ const Login = () => {
     onAuthStateChanged(auth, user => {
         if(user !== null){
             userL = user;
-            console.log(userL)
         }
         if(user === null){
             console.log("LOGOUT")

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "../style/TabList.css"
 
 const TabList = ({notes , onDelete, onChangeText, onClickToTabLi}) => {

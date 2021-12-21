@@ -1,8 +1,10 @@
 import "../style/LoadList.css"
-import { load, titleList } from "../firebase.js"
-import { onSnapshot } from "firebase/firestore"
+import { storageRef } from "../firebase";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
+    const [listF, setListF] = useState([]);
 
     /**
      * JSX로 for문 적을 수 없기에 생성한 컴포넌트 
@@ -16,6 +18,7 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
             console.log(saveData[i])
             result.push(<li onClick = {() => loadTab(saveData[i])}>{saveData[i]}</li>)
         }
+        console.log(result)
         return result;
     }
 
@@ -40,9 +43,26 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
 
 
 
-    const loadF = (title) => {
-        const text = JSON.parse(load(title)).text;
+    /**
+     * URL을 통한 다운로드는 구글클라우드 별도 설치 후 CORS 가능토록 스토리지 버킷을 구성을 바꿔야함(아니면 거부됨)
+     * https://firebase.google.com/docs/storage/web/download-files#download_data_via_url
+     * @param {}} title 
+     */
+    const loadFireBase = async (title) => {
+        let text;
+        const textF = storageRef.child('text/' + title)
+        await textF.getDownloadURL().then(async (url) => {
+            await axios.get(url, {responseType: 'blob'}).then(async (res) => {
+                await res.data.text().then(async (textB) => {
+                    text = textB;
+                })
+            })
+        })
+        return text;
+    }
 
+    const loadF = async (title) => {
+        const text = await loadFireBase(title);
         const loadNote = {
             id : nextId.current,
             title : title,
@@ -52,27 +72,34 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
         nextId.current += 1;
         const newNotes = notes.map(note => ({...note, selected: false}))
         setNotes(() => newNotes.concat(loadNote));
+        localStorage.setItem(title, text);
         console.log("loadTab!!!")
+    }
+
+    useEffect(() => {
+        listFireBase();
+    }, [])
+
+    /**
+     * firebase에서 해당하는 storage에 있는 파일들을 나열하여 List에 세팅
+     */
+    const listFireBase = () => {
+        const textF = storageRef.child('text/');
+        textF.listAll().then((res) => {
+            res.items.forEach((itemRef) => {
+                setListF((arr) => [...arr, itemRef.name])
+            })
+        })
     }
 
     const contentF = () => {
         const result = [];
-        const saveList = titleList();
-        console.log(saveList)
-
-        if(saveList.length === 0) result.push(<li>아직 저장된 데이터가 없습니다.</li>)
-        onSnapshot(saveList, snaps => {
-            snaps.forEach(note => {
-                result.push(<li onClick = {() => loadF(note.data().title)}>{note.data().title}</li>)
-            })
-        })
-        // for(let i = 0; i < saveList.length; i++){
-        //     console.log(saveList[i])
-        //     result.push(<li onClick = {() => loadF(saveList[i])}>{saveList[i]}</li>)
-        // }
+        if(listF.length === 0) result.push(<li>아직 저장된 데이터가 없습니다.</li>)
+        for(let i = 0; i < listF.length; i++){
+            result.push(<li onClick = {() => loadF(listF[i])}>{listF[i]}</li>)
+        }
         return result;
     }
-
 
     return(
         <div className = "loadContainer" onClick = {onLoad}>
