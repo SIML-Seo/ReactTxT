@@ -1,10 +1,12 @@
 import "../style/LoadList.css"
-import { storageRef } from "../firebase";
+import { storageRef, auth } from "../firebase";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
     const [listF, setListF] = useState([]);
+
+    const uId = (!auth.currentUser) ? "" : auth.currentUser.uid;
 
     /**
      * JSX로 for문 적을 수 없기에 생성한 컴포넌트 
@@ -50,7 +52,7 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
      */
     const loadFireBase = async (title) => {
         let text;
-        const textF = storageRef.child('text/' + title)
+        const textF = storageRef.child('user/' + uId + '/text/' + title)
         await textF.getDownloadURL().then(async (url) => {
             await axios.get(url, {responseType: 'blob'}).then(async (res) => {
                 await res.data.text().then(async (textB) => {
@@ -84,7 +86,7 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
      * firebase에서 해당하는 storage에 있는 파일들을 나열하여 List에 세팅
      */
     const listFireBase = () => {
-        const textF = storageRef.child('text/');
+        const textF = storageRef.child('user/' + uId + '/text/');
         textF.listAll().then((res) => {
             res.items.forEach((itemRef) => {
                 setListF((arr) => [...arr, itemRef.name])
@@ -98,6 +100,7 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
         for(let i = 0; i < listF.length; i++){
             result.push(<li onClick = {() => loadF(listF[i])}>{listF[i]}</li>)
         }
+        console.log();
         return result;
     }
 

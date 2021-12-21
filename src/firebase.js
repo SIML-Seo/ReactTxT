@@ -29,8 +29,12 @@ export const auth = getAuth();
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({prompt: 'select_account'})
+provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
-export const signInGoogle = () => signInWithPopup(auth, provider)
+export const signInGoogle = () => signInWithPopup(auth, provider).then((result) => {
+  const credential = GoogleAuthProvider.credentialFromResult(result);
+  const token = credential.accessToken;
+})
 
 export const signOutGoogle = () => signOut(auth)
 

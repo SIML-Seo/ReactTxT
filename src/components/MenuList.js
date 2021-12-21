@@ -1,11 +1,13 @@
 import {useState} from "react";
 import LoadList from "./LoadList"
 import '../style/MenuList.css'
-import { storageRef } from "../firebase.js"
+import { storageRef, auth } from "../firebase.js"
 
 const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
     const [saveData, setSaveData] = useState([])
     const [modalOn, setModalOn] = useState(false)
+
+    const uId = (!auth.currentUser) ? "" : auth.currentUser.uid;
 
     /**
      * 저장된 데이터일 경우 바로 저장, 새로운 저장일 경우 프롬프트를 띄워 저장, 만약 취소 버튼 클릭시 노네임으로 저장
@@ -75,7 +77,7 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
         if(!saveData.includes(title)){
             setSaveData(saveData.concat(title))
         }
-        const titleF = storageRef.child('text/' + title);
+        const titleF = storageRef.child('user/'+ uId + '/text/' + title);
         titleF.putString(text).then(function(snapshot){
             console.log("upload!!")
         })
