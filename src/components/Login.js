@@ -1,12 +1,16 @@
 import { signInGoogle, signOutGoogle, auth } from '../firebase.js'
-import { getAuth, EmailAuthProvider, signOut, onAuthStateChanged} from 'firebase/auth';
+import { useState } from 'react';
 import "../style/Login.css";
 
 const Login = () => {
-    let userL = ""
-    onAuthStateChanged(auth, user => {
+    const [user, setUser] = useState([""]);
+
+    /**
+     * 로그인 상태 확인
+     */
+    auth.onAuthStateChanged(loginned => {
         if(user !== null){
-            userL = user;
+            setUser(loginned)
         }
         if(user === null){
             console.log("LOGOUT")
@@ -15,12 +19,10 @@ const Login = () => {
 
     return(
         <div className="login">
-            {(userL === "") ? 
+            {(user === null) ? 
                 <button onClick={signInGoogle}>로그인</button> :
                 <button onClick={signOutGoogle}>로그아웃</button>
             }
-            {userL}
-            <button onClick={signOutGoogle}>로그아웃</button>
         </div>
     )
 }
