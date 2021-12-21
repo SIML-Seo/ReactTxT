@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import Notepad from './Notepad';
+import Notepad from './NNotepad';
 import TabList from './TabList';
 import MenuList from './MenuList';
 import Login from './Login';
