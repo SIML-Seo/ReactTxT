@@ -8,7 +8,7 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
     const [modalOn, setModalOn] = useState(false)
 
     const uId = (!auth.currentUser) ? "" : auth.currentUser.uid;
-
+    
     /**
      * 저장된 데이터일 경우 바로 저장, 새로운 저장일 경우 프롬프트를 띄워 저장, 만약 취소 버튼 클릭시 노네임으로 저장
      * @returns 이미 한 번 저장한 데이터일 경우 저장 버튼 클릭 시 새 타이틀 작성 않고 바로 저장
@@ -86,6 +86,14 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
     }
 
     const onSaveF = () => {
+        if(!uId){
+            alert("로그인이 필요한 서비스입니다. 로그인해주세요.")
+            return
+        }
+        if(!notes.find(note => note.selected)){
+            alert("활성화된 노트가 없습니다.")
+            return
+        }
         let title = notes.find(note => note.selected).title
         let text = notes.find(note => note.selected).text
         if(saveData.includes(title)){
@@ -98,6 +106,14 @@ const MenuList = ({notes, setNotes, nextId, onNewTab}) => {
     }
 
     const onSaveAsF = () => {
+        if(!uId){
+            alert("로그인이 필요한 서비스입니다. 로그인해주세요.")
+            return
+        }
+        if(!notes.find(note => note.selected)){
+            alert("활성화된 노트가 없습니다.")
+            return
+        }
         const currentTitle = notes.find(note => note.selected).title;
         let saveAsTitle = prompt("다시 저장할 타이틀을 정해주세요.")
         if(!saveAsTitle) return;

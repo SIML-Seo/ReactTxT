@@ -86,6 +86,10 @@ const LoadList = ({notes, setNotes, nextId, saveData, onLoad}) => {
      * firebase에서 해당하는 storage에 있는 파일들을 나열하여 List에 세팅
      */
     const listFireBase = () => {
+        if(!uId){
+            alert("로그인이 필요한 서비스입니다. 로그인해주세요.")
+            return
+        }
         const textF = storageRef.child('user/' + uId + '/text/');
         textF.listAll().then((res) => {
             res.items.forEach((itemRef) => {
