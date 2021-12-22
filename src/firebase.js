@@ -1,6 +1,7 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut} from "firebase/auth";
 import "firebase/compat/storage"
 import firebase from "firebase/compat/app";
+import { useState } from "react";
 
 const firebaseConfig = {
 //   apiKey: process.env.REACT_APP_API_KEY,
@@ -36,6 +37,8 @@ export const signInGoogle = () => signInWithPopup(auth, provider).then((result) 
   const token = credential.accessToken;
 })
 
-export const signOutGoogle = () => signOut(auth)
+export const signOutGoogle = () => signOut(auth).then(() => {
+  window.location.reload();
+})
 
 export const storageRef = firebase.storage().ref();
